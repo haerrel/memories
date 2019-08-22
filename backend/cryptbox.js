@@ -1,14 +1,18 @@
-// const crypto = require("crypto"); // TODO how to hash with crypto-lib
+const crypto = require("crypto");
+const aes256 = require('aes256');
+
 function encrypt(data, secret) {
-    return data + secret; 
+    return aes256.encrypt(secret, data);
 }
 
 function decrypt(encrypted, secret) {
-    return encrypted.substr(0, encrypted.length - secret.length)
+    return aes256.decrypt(secret, encrypted);
 }
 
 function hash(plain) {
-    return plain.length;
+    return crypto.createHmac('sha256', "")
+        .update(plain)
+        .digest('hex');
 }
 
 
@@ -16,4 +20,4 @@ module.exports = {
     encrypt,
     decrypt,
     hash
-}
+};

@@ -3,7 +3,7 @@ const in_mem_db = [];
 function insert(obj) {
     obj.id = in_mem_db.length == 0
         ? 0
-        : in_mem_db.sort((e1, e2) => e2.id - e1.id)[0].id + 1
+        : in_mem_db.sort((e1, e2) => e2.id - e1.id)[0].id + 1;
     in_mem_db.push(obj);
 }
 

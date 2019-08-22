@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const database = require('../database/database');
 const cryptbox = require('../cryptbox');
+const moment = require('moment');
 
 // CREATE: PUSH A NEW CARD
 router.post('/card', function(req, res) {
@@ -24,10 +25,13 @@ router.post('/card/:id/unlock', function(req, res) {
     const id = req.params.id;
     const secret = req.body.secret;
     let card = Object.assign({}, database.get(id));
-    if (card) {
+    if (card && card.date && moment(card.date).diff(moment()) < 0) {
         card.image_data = cryptbox.decrypt(card.image_data, secret);
         if (cryptbox.hash(card.image_data) == card.hash) {
-            // TODO where to go with decrypted image
+            let entry = database.get(id);
+            entry.image_data = card.image_data;
+            entry.open = true;
+            res.json(entry);
             res.status(200).end();
             return;
         }
