@@ -7,7 +7,7 @@ Share memories with your loved ones 📷🤗🖼💌
 
 ## Installation Hints
 * App cnnects to the Heroku PostgreSQL Database through the provided values in the environment variable `DATABASE_URL`
-* Run the SQL statement provided in `backend/database/create_tables.sql` to create a table in your Postgres DB
+* Run the SQL statement provided in `backend/database/create_tables.sql` to create mandatory tables in your Postgres DB
 * Deploy App
 
 ## Technical facts
