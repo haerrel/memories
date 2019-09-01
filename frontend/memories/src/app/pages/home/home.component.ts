@@ -15,9 +15,7 @@ export class HomeComponent implements OnInit {
 
   ngOnInit() {
     this.backend.getCards().subscribe(cards => {
-      this.cards = cards.sort((e1, e2) => {
-        return moment(e1.date).diff(e2.date);
-      });
+      this.cards = cards;
     });
   }
 

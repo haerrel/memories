@@ -1,27 +1,74 @@
-const in_mem_db = [];
+const { Pool } = require('pg');
 
-function insert(obj) {
-    obj.id = in_mem_db.length == 0
-        ? 0
-        : in_mem_db.sort((e1, e2) => e2.id - e1.id)[0].id + 1;
-    in_mem_db.push(obj);
+const pool = new Pool({
+    connectionString: process.env.DATABASE_URL,
+    ssl: true,
+});
+
+const noOp = () => {};
+const pipe = (data) => {return data;};
+
+
+function insert(data, onSuccess, onError) {
+    query(
+        'INSERT INTO card (image_data, hash, date)' +
+        'VALUES (\'' +
+        data.image_data + '\', \'' +
+        data.hash + '\', \'' +
+        data.date + '\');',
+        onSuccess,
+        onError
+    );
 }
 
-function get(id) {
-    for (const card of getAll()) {
-        if (card.id == id) {
-            return card;
+function get(id, onSuccess, onError = noOp) {
+    query(
+        `SELECT * FROM card WHERE ID=${id}`,
+        onSuccess,
+        onError,
+        function(data) {
+            if (data.length) {
+                onSuccess(data[0]);
+            } else {
+                onError();
+            }
         }
-    }
-    return null;
+    );
 }
 
-function getAll() {
-    return in_mem_db;
+function update(id, data) {
+    query(
+        'UPDATE card SET ' +
+        'image_data=\'' + data.image_data + '\', ' +
+        'open=\'' + data.open + '\' ' +
+        `WHERE ID=${id}`
+    );
+}
+
+function getAll(onSuccess, onError) {
+    query(
+        'SELECT * FROM card ORDER BY date ASC;',
+        onSuccess,
+        onError,
+    );
+}
+
+function query(sql, onSuccess = noOp, onError = noOp, dataTransformation = pipe) {
+    pool.query(sql, (err, res) => {
+        if (err) {
+            console.log(err);
+            onError();
+        }
+        for (let row of res.rows) {
+            console.log(JSON.stringify(row));
+        }
+        onSuccess(dataTransformation(res.rows));
+    });
 }
 
 module.exports = {
     insert,
     get,
+    update,
     getAll
 };
