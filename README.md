@@ -14,11 +14,11 @@ It connects to the Heroku PostgreSQL Database through the provided values in the
 
 ## REST API
 **Create new image**
-`
+<pre>
 POST {hostname}/api/v1/card
 {
   "image_data": "base64-encoded-image-string",
   "date": "YYYY-MM-DD",
   "secret": "yourSecretString"
 }
-`
+</pre>
