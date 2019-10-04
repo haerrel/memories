@@ -1,6 +1,9 @@
 # Memories
 Share memories with your loved ones 📷🤗🖼💌
 
+
+![Landing Page](/doc/mockup/Memories.jpg)
+
 ## About
 * Developed for deployment on heroku.  
 * Based on the Heroku NodeJS Getting Started Template https://github.com/heroku/node-js-getting-started.git.  
